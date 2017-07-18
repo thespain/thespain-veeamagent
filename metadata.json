@@ -1,0 +1,18 @@
+{
+  "name": "thespain-veeamagent",
+  "version": "0.1.0",
+  "author": "thespain",
+  "summary": "This module manages the Veeam Backup Agent.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/thespain/veeamagent",
+  "project_page": "https://github.com/thespain/veeamagent",
+  "issues_url": "https://github.com/thespain/veeamagent/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "data_provider": null
+}
+
