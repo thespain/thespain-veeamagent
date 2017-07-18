@@ -1,15 +1,25 @@
+require 'rubygems'
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet_blacksmith/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'metadata-json-lint/rake_task'
+require 'yamllint/rake_task'
 
-if RUBY_VERSION >= '1.9'
-  require 'rubocop/rake_task'
-  RuboCop::RakeTask.new
+exclude_paths = [
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
+
+PuppetLint::RakeTask.new :lint do |config|
+  config.fail_on_warnings = true
+  config.ignore_paths = exclude_paths
+  config.log_format = "%{path}:%{line}:%{check}:%{KIND}:%{message}"
 end
 
-PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.relative = true
-PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'pkg/**/*.pp']
+PuppetLint.configuration.send('disable_spaceship_operator_without_tag')
+
+PuppetSyntax.exclude_paths = exclude_paths
 
 desc 'Validate manifests, templates, and ruby files'
 task :validate do
@@ -25,7 +35,7 @@ task :validate do
 end
 
 desc 'Run lint, validate, and spec tests.'
-task :test do
+task :tests do
   [:lint, :validate, :spec].each do |test|
     Rake::Task[test].invoke
   end
