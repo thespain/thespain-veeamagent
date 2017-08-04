@@ -1,0 +1,28 @@
+<!--###############################################################
+###################################################################
+####
+####        This file is managed by Puppet
+####
+####################################################################
+#################################################################-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Config Version="1" />
+<Repositories />
+<Jobs>
+    <Job Name="<%= $name %>" creation_time="1970-01-01 00:00:00" RepoName="<% if $vbrserver_fqdn { -%>[<%= regsubst($vbrserver_fqdn, '^(\S*?)\.(.*?)$', '\1') %>]<% } -%><%= $repo_name %>">
+        <JobOptions Compression="<%= $compression_type %>" BlockSize="<%= $block_size %>" PrefreezeCommand="<%= $pre_freezecommand %>" PostthawCommand="<%= $post_thawcommand %>" PrejobCommand="<%= $pre_jobcommand %>" PostjobCommand="<%= $post_jobcommand %>" MaxPoints="<%= $max_points %>" IsDedupEnabled="<%= $enable_dedup %>" Schedule="<%= $enabled %>" RetryCount="<%= $retry_count %>" IndexAll="<%= $index_all %>">
+            <Schedule Hours="<%= $run_hour %>" Minutes="<%= $run_minute %>">
+                <WeekMask Sunday="<%= $run_sunday %>" Monday="<%= $run_monday %>" Tuesday="<%= $run_tuesday %>" Wednesday="<%= $run_wednesday %>" Thursday="<%= $run_thursday %>" Friday="<%= $run_friday %>" Saturday="<%= $run_saturday %>" />
+            </Schedule>
+        </JobOptions>
+        <ObjectsForBackup>
+            <Object ObjectType="<%= $object_type %>" RecordType="<%= $record_type %>" Value="<%= $object_value %>" />
+        </ObjectsForBackup>
+    </Job>
+</Jobs>
+<% if $vbrserver_fqdn { -%>
+<VbrServers>
+    <VbrServer Name="<%= regsubst($vbrserver_fqdn, '^(\S*?)\.(.*?)$', '\1') %>" login="<%= $vbrserver_login %>" domain="<%= $vbrserver_domain %>" fqdn="<%= $vbrserver_fqdn %>" password="<%= $vbrserver_password %>" Endpoint="<%= $vbrserver_fqdn %>:<%= $vbrserver_port %>" />
+</VbrServers>
+<% } -%>

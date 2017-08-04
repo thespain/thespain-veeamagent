@@ -1,18 +1,44 @@
 {
   "name": "thespain-veeamagent",
   "version": "0.1.0",
-  "author": "thespain",
+  "author": "Jake Spain",
   "summary": "This module manages the Veeam Backup Agent.",
-  "license": "Apache-2.0",
-  "source": "https://github.com/thespain/veeamagent",
-  "project_page": "https://github.com/thespain/veeamagent",
-  "issues_url": "https://github.com/thespain/veeamagent/issues",
+  "license": "BSD-3-Clause",
+  "source": "https://github.com/thespain/thespain-veeamagent",
+  "project_page": "https://github.com/thespain/thespain-veeamagent",
+  "issues_url": "https://github.com/thespain/thespain-veeamagent/issues",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 4.0.0 < 5.0.0"
+    },
+    {
+      "name": "puppet-yum",
+      "version_requirement": ">= 2.0.0 < 3.0.0"
     }
   ],
-  "data_provider": null
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 6.0.0"
+    }
+  ],
+  "description": "The veeamagent module installs, configures, and manages the Veeam Agent, Veeam backup jobs, and local repositories."
 }
 
