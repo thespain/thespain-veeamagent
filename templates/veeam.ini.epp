@@ -1,0 +1,163 @@
+##################################################################
+###################################################################
+####
+####        This file is managed by Puppet
+####
+####################################################################
+####################################################################
+
+# veeam.ini, v1.0.1.364
+# This is the veeamservice system-wide configuration file.
+# The strategy used for options in the default veeam.ini shipped with
+# Veeam Agent for Linux is to specify options with their default value where
+# possible, but leave them commented. Uncommented options override the
+# default value.
+
+[backup]
+# Backup cluster alignment logarithm
+# clusterAlign= 3
+<% if $veeamagent::cluster_align {-%>
+clusterAlign= <%= $veeamagent::cluster_align %>
+<% } -%>
+
+# Ignore inactive LVM logical volumes during backup
+# ignoreInactiveLvm= false
+<% if $veeamagent::inactivelvm_ignore {-%>
+ignoreInactiveLvm= <%= $veeamagent::inactivelvm_ignore %>
+<% } -%>
+
+# IO rate limit, from 0.01 to 1.0
+# ioRateLimit= 0.9
+<% if $veeamagent::iorate_limit {-%>
+ioRateLimit= <%= $veeamagent::iorate_limit %>
+<% } -%>
+
+# CPU priority for veeamagents, from 0 to 19
+# priority= 10
+<% if $veeamagent::cpu_priority {-%>
+priority= <%= $veeamagent::cpu_priority %>
+<% } -%>
+
+[bitlooker]
+# Allow to disable bitlooker
+# enabled= true
+<% if $veeamagent::bitlooker_enabled {-%>
+enabled= <%= $veeamagent::bitlooker_enabled %>
+<% } -%>
+
+[db]
+# Veeam database path
+# path= /var/lib/veeam/veeam_db.sqlite
+<% if $veeamagent::db_path {-%>
+path= <%= $veeamagent::db_path %>
+<% } -%>
+
+# Veeam database scheme path
+# schemePath= /usr/share/veeam/lpb_scheme.sql
+<% if $veeamagent::db_schemepath {-%>
+schemePath= <%= $veeamagent::db_schemepath %>
+<% } -%>
+
+# Veeam database upgrade scheme path
+# schemeUpgradePath= /usr/share/veeam/lpb_upgrade_scheme.sql
+<% if $veeamagent::db_schemeupgradepath {-%>
+schemeUpgradePath= <%= $veeamagent::db_schemeupgradepath %>
+<% } -%>
+
+
+[general]
+# Logs path
+# logsFolder= /var/log/veeam
+<% if $veeamagent::log_dir {-%>
+logsFolder= <%= $veeamagent::log_dir %>
+<% } -%>
+
+
+[job]
+# New job default retries count
+# retriesCount= 3
+<% if $veeamagent::job_retries {-%>
+retriesCount= <%= $veeamagent::job_retries %>
+<% } -%>
+
+# Retry all errors, set to 'false' to enable retries only for 'snapshot overflow'
+# retryAllErrors= true
+<% if $veeamagent::job_retryallerrors {-%>
+retryAllErrors= <%= $veeamagent::job_retryallerrors %>
+<% } -%>
+
+
+[scripts]
+# Ignore freeze and thaw scripts result
+# ignoreFreezeThawFailures= false
+<% if $veeamagent::freezethawfailure_ignore {-%>
+ignoreFreezeThawFailures= <%= $veeamagent::freezethawfailure_ignore %>
+<% } -%>
+
+# Timeout for freeze and thaw scripts
+# timeoutFreezeThaw= 600
+<% if $veeamagent::freezethaw_timeout {-%>
+timeoutFreezeThaw= <%= $veeamagent::freezethaw_timeout %>
+<% } -%>
+
+# Timeout for pre- and post-backup scripts
+# timeoutPrePost= 600
+<% if $veeamagent::prepost_timeout {-%>
+timeoutPrePost= <%= $veeamagent::prepost_timeout %>
+<% } -%>
+
+
+[service]
+# Service socket
+# socket_path= /tmp/veeam/socket/veeam.sock
+<% if $veeamagent::socket_path {-%>
+socket_path= <%= $veeamagent::socket_path %>
+<% } -%>
+
+
+[snapshot]
+# Percent of free space on block device can be used for snapshot data allocating
+# limitFreePercent= 50
+<% if $veeamagent::freepercent_limit {-%>
+limitFreePercent= <%= $veeamagent::freepercent_limit %>
+<% } -%>
+
+# Location folder for snapshot data, only for 'stretch' and 'common' snapshot
+# location=
+<% if $veeamagent::snapshot_location {-%>
+location= <%= $veeamagent::snapshot_location %>
+<% } -%>
+
+# Maximum possible snapshot data size, not for stretch snapshot
+# maxSize= 21474836480
+<% if $veeamagent::snapshot_maxsize {-%>
+maxSize= <%= $veeamagent::snapshot_maxsize %>
+<% } -%>
+
+# Minimal possible snapshot data size, not for stretch snapshot
+# minSize= 536870912
+<% if $veeamagent::snapshot_minsize {-%>
+minSize= <%= $veeamagent::snapshot_minsize %>
+<% } -%>
+
+# Snapshot data type, can be 'stretch' (default) or 'common'
+# type=
+<% if $veeamagent::snapshot_type {-%>
+type= <%= $veeamagent::snapshot_type %>
+<% } -%>
+
+
+[stretchsnapshot]
+# Stretch snapshot data portion
+# portionSize= 1073741824
+<% if $veeamagent::stretchsnapshot_portionsize {-%>
+portionSize= <%= $veeamagent::stretchsnapshot_portionsize %>
+<% } -%>
+
+
+[veeamsnap]
+# Kernel log logging level. 7 - list all messages as an error, 4 or 0 - all messages as a warning, 2 - all message as a trace (use only if veeam works perfectly on your system)
+# debuglogging= 0
+<% if $veeamagent::log_debuglevel {-%>
+debuglogging= <%= $veeamagent::log_debuglevel %>
+<% } -%>

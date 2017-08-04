@@ -1,0 +1,15 @@
+##################################################################
+###################################################################
+####
+####        This file is managed by Puppet
+####
+####################################################################
+####################################################################
+
+[veeam]
+name=Veeam Backup for GNU/Linux - $basearch
+baseurl=http://repository.veeam.com/backup/linux/agent/rpm/el/<%= $facts['os']['release']['major'] -%>/$basearch
+enabled=1
+gpgcheck=1
+gpgcakey=file://<%= $veeamagent::gpgkey_ca_local %>
+gpgkey=<%= $veeamagent::gpgkey_source %> <%= $veeamagent::gpgkey_ca_source -%>
