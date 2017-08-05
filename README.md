@@ -1,7 +1,7 @@
-[![Build Status](https://img.shields.io/travis/thespain/thespain-veeamagent/master.svg)]()
-[![Coveralls branch](https://img.shields.io/coveralls/thespain/thespain-veeamagent/master.svg)]()
-[![Puppet Forge](https://img.shields.io/puppetforge/v/thespain/thespain-veeamagent.svg)]()
-[![GitHub tag](https://img.shields.io/github/tag/thespain/thespain-veeamagent.svg)]()
+[![Build Status](https://img.shields.io/travis/thespain/thespain-veeamagent/master.svg)](https://travis-ci.org/thespain/thespain-veeamagent/branches)
+[![Coverage Status](https://coveralls.io/repos/github/thespain/thespain-veeamagent/badge.svg?branch=master)](https://coveralls.io/github/thespain/thespain-veeamagent?branch=master)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/thespain/veeamagent.svg)](https://forge.puppet.com/thespain/veeamagent)
+[![GitHub tag](https://img.shields.io/github/tag/thespain/thespain-veeamagent.svg)](https://github.com/thespain/thespain-veeamagent)
 # veeamagent
 
 #### Table of Contents
