@@ -1,7 +1,7 @@
 # Handles backup jobs.
 #
 # Note about the Execs:
-# When parameters of the job change, then delete he backup job and reimport it.
+# When parameters of the job change, then delete the backup job and reimport it.
 # An extra level of complication is added when using Veeam B&R repositories. 
 # In order to successfully re-import a job the VBR server must be deleted
 # before re-importing, as well as resyncing the VBR server for repositories.
