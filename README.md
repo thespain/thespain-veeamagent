@@ -866,6 +866,10 @@ There are also several other limitations to solve noted in the open issue [#1](h
 
 Pull requests are welcome!
 
+#### Contributors
+
+Gene Liverman (@genebean) - Proofread and updated documentation.
+
 ### Testing
 
 This project contains a Vagrantfile for automated testing using [rspec-puppet](http://rspec-puppet.com).
@@ -874,6 +878,7 @@ This project contains a Vagrantfile for automated testing using [rspec-puppet](h
 
 ```shell
 vagrant up
+vagrant ssh
 export PUP_MOD=veeamagent; rsync -rv --delete /vagrant/ /home/vagrant/$PUP_MOD --exclude bundle; cd /home/vagrant/$PUP_MOD; bundle install --jobs=3 --retry=3; bundle exec rake tests
 ```
 
