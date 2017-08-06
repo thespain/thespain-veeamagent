@@ -1,2 +1,6 @@
+/.bundle
 /.vagrant/
+coverage/
 Gemfile.lock
+pkg/
+vendor/
