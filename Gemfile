@@ -5,16 +5,16 @@ puppetversion = ENV.key?('PUPPET_VERSION') ? ENV['PUPPET_VERSION'] : ['~> 5.0']
 
 group :development, :unit_tests do
   gem 'metadata-json-lint',      '~> 2.0'
-  if puppetversion =~ /^4\./
-    gem 'semantic_puppet',       '~> 1.0'
+  if puppetversion =~ / 4\./
     gem 'rgen',                  '~> 0.8'
-  elsif puppetversion =~ /^5\./
+  elsif puppetversion =~ / 5\./
     gem 'CFPropertyList',        '~> 2.3'
   end
   gem 'puppet',                  puppetversion
   gem 'puppetlabs_spec_helper',  '~> 2.2'
   gem 'rspec-puppet',            '~> 2.6'
   gem 'rspec-puppet-facts',      '~> 1.8'
+  gem 'semantic_puppet',         '~> 1.0'
   gem 'yamllint',                '~> 0.0.9'
   gem 'coveralls',               require: false
 
