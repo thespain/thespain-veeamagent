@@ -1,20 +1,18 @@
 language: ruby
 cache: bundler
-
 matrix:
   include:
-    - rvm: 2.1.6
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.4.1
-      env: PUPPET_VERSION="~> 5.0"
-
-script: 'bundle exec rake tests'
-
+  - rvm: 2.1.6
+    env: PUPPET_VERSION="~> 4.0"
+  - rvm: 2.4.1
+    env: PUPPET_VERSION="~> 5.0"
+script: bundle exec rake tests
 notifications:
   email:
     on_failure: change
     on_success: never
   slack:
     rooms:
-      - thecomfyseat:WL1DXdQiUfriFxuS9otGGvKf
-      - uwg-techs:sdP80CwKyGdijFfTG9Vmjncl
+      secure:
+        - Z5lquxNR5N2/dRhpGmpgxCCXPaWfkXWPdsjy4PwJrb7NgdrGd6f+2PBnEPJEkI7Pkzz2ZfdsLNBvhp1puvqDCSDbsGPg39Q0toU4KEKNMzZzVT53+S2tJqWuEP84llVd/t9jJRoWxbRtLWsIG4YPdEwmWS2RzsPYsMYueGvxLACHfT47cKXy2ttYKqL1DBBCSIk39yGeWxzz1pVQ17hKzTxEdTdIDSfCepbu7/e/jxrpBFQzO6q0ELpNQBfgaHrS87q8eJbnXePNXzDAlsHSvi576oUoPP005kKEN2O4xRZmb0tCfVtvWHVaUciFf1Yu4pD0yDDxxTYLBmG3Sf3PQzoKL7WHYe4wOR7xl6mzkdVuD4n1RP5d7aDiM5LFwJBu7Mf4zbTM9Hai+YUyXBZmfyhJMgnCSZi60ET0UuwhKfid87oGBf5c5mRrUM1PYVcE2bBDXLCEzbPcIB5qJ86s24JJKvaM5txIqu3YBFA0vMcwz5E4Aesl2RTjujFQr/jyor0m+3eGT6hgteSotpCO8Rz4PGH8qP3uuXt4CFhfrTDLtZ1efSx82LPinDqTd1i6FAVmfM2Y6573oDjwQ/mEe3RMUMBzaSB5iiDR08nk53UGPO6GefwhmqIVKsGmlmwF19a75KRX/GAH1pB2r4PtVnI9X+/PiIDGYDMagcDvXmY=
+        - WtEWVCeAueQH7tJQn8LVu7jSDYy73s3r7mMuLdoJkSCo9qQ0eGXxNiXVmwpK+oH3r5rVOlqWHlC75rZR7aJOZo8rfD//B0WdKUbaUGjIC9P5HpVmwR2ZZdpo/rThSckmcvnztqdVA4LhBup7QlGLOHbyJx/AA3zDsQUVXAbFUV5OIdBZCsd7NHOrAdFrD0BkCBTj5pG6faKtHW7XqSXTld+tqI1I1ikQw1zQwnJAKqfIz8o9USS+id6Ch4c2d7HaT77OTen2SnekqgxnIz4SrdwVzYdDy1hnzyZ6JqlkLXtAAxZAD9ECRHUq4rzD3IrgBbMY+gIiX9FqhwCzKWsNgOgaGSrnKr9ZBCXHrUhHlzWqP/h5bLZ6GV+RLGiw1myHnYwkcZoLGWH3oevuYzx5RkUmoeyUDclmOYe4LE46mnNiURuJ23x+yEAri46Z+BX4SCOSd7KP83WrTRBciLJowlPEbJbLH69xEAZFOX4uIlDGwJTuYCx96GtVm6eYeXbkwi/up/+QRkGsZAPayKT4X4paJDZbiZDK7BVtV8MhOydsFtBkGpGfOiGxIW7buyInZHesgQ4Z32vwX6+r+Sdsb1AzQYT8SvgwcvO1RXyNp9NwLJwX72BPkv5NRCQ3GP2f2V+cs4VTrm65OtDNI3cIRNtnx6awsf2VlMCrhsX/GCc=
