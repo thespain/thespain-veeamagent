@@ -1,6 +1,6 @@
 {
   "name": "thespain-veeamagent",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "author": "Jake Spain",
   "summary": "This module manages the Veeam Backup Agent.",
   "license": "BSD-3-Clause",
