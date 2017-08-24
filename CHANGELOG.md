@@ -1,5 +1,8 @@
 [![GitHub tag](https://img.shields.io/github/tag/thespain/thespain-veeamagent.svg)](https://github.com/thespain/thespain-veeamagent)
 
+## 2017-08-24 Release 0.3.0
+- Added enhancements to testing (Thanks to Gene Liverman).
+
 ## 2017-08-06 Release 0.2.2
 - Fixed changelog and another Travis CI issue.
 
