@@ -868,7 +868,7 @@ Pull requests are welcome!
 
 #### Contributors
 
-Gene Liverman (@genebean) - Proofread and updated documentation.
+Gene Liverman (@genebean) - Proofread and updated documentation, added enhancements to testing.
 
 ### Testing
 
