@@ -45,6 +45,7 @@
 # @param repo_template String Path to a template for the Veeeam package repository. Default value: `'veeamagent/veeam-repo.epp'`.
 # @param service_enable Boolean Whether to enable the Veeam service. Default value: `true`.
 # @param service_ensure String Ensure value for the Veeam service. Default value: `running`.
+# @param service_manage Boolean Manage the service of the Veeam agent. Default value: true
 # @param service_name String Name of the Veeam service. Default value: varies by operating system.
 # @param snapshot_free_percent Integer[1,99] Free percent of storage. Used for calculate optimal snapshot data size and determinate snapshot data location, not for stretch snapshot. Default value: 99
 # @param snapshot_location [Optional[String]] Location folder for snapshot data, only for 'stretch' and 'common' snapshot. Default value: ''.
@@ -102,6 +103,7 @@ class veeamagent(
   String $repo_template,
   Boolean $service_enable,
   String $service_ensure,
+  Boolean $service_manage,
   String $service_name,
   Integer[1,99] $snapshot_free_percent,
   Optional[String] $snapshot_location,

@@ -76,6 +76,7 @@ veeamagent::repo_path: '/etc/yum.repos.d/veeam.repo'
 veeamagent::repo_template: 'veeamagent/veeam-repo.epp'
 veeamagent::service_enable: true
 veeamagent::service_ensure: running
+veeamagent::service_manage: true
 veeamagent::service_name: 'veeamservice'
 veeamagent::snapshot_free_percent: 99
 veeamagent::snapshot_location:

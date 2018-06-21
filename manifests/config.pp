@@ -10,6 +10,5 @@ class veeamagent::config inherits veeamagent {
     content => epp('veeamagent/veeam.ini.epp', {
       config_file_version => $config_file_version
     }),
-    notify  => Class['::veeamagent::service'],
   }
 }
