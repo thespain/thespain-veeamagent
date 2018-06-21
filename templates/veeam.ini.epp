@@ -1,3 +1,5 @@
+<%- | String $config_file_version
+| -%>
 ##################################################################
 ###################################################################
 ####
@@ -6,7 +8,7 @@
 ####################################################################
 ####################################################################
 
-# veeam.ini, v1.0.1.364
+# veeam.ini, <%= $config_file_version %>
 # This is the veeamservice system-wide configuration file.
 # The strategy used for options in the default veeam.ini shipped with
 # Veeam Agent for Linux is to specify options with their default value where
@@ -39,12 +41,26 @@ priority= <%= $veeamagent::cpu_priority %>
 <% } -%>
 
 [bitlooker]
-# Allow to disable bitlooker
+# Enable BitLooker
 # enabled= true
 <% if $veeamagent::bitlooker_enabled {-%>
 enabled= <%= $veeamagent::bitlooker_enabled %>
 <% } -%>
+<% if $veeamagent::agent_version == 2 {-%>
 
+# Exclude the specified devices from BitLooker processing (e.g. /dev/sda1, /dev/sdb3)
+# exclude=
+<% if $veeamagent::bitlooker_exclude {-%>
+exclude= <%= $veeamagent::bitlooker_exclude.join(', ') %>
+<% } -%>
+
+# BitLooker timeout per device, ms
+# timeout= 900000
+<% if $veeamagent::bitlooker_timeout {-%>
+timeout= <%= $veeamagent::bitlooker_timeout %>
+<% } -%>
+
+<% } -%>
 [db]
 # Veeam database path
 # path= /var/lib/veeam/veeam_db.sqlite
@@ -66,10 +82,45 @@ schemeUpgradePath= <%= $veeamagent::db_schemeupgradepath %>
 
 
 [general]
+<% if $veeamagent::agent_version == 2 {-%>
+# Root folder path for mount file systems of backup disks
+# backupDisksFsMountFolder= /mnt/backup
+<% if $veeamagent::backup_disks_fs_mount {-%>
+backupDisksFsMountFolder= <%= $veeamagent::backup_disks_fs_mount %>
+<% } -%>
+
+# Root folder path for mount backup disks
+# backupDisksMountFolder= /mnt/backup
+<% if $veeamagent::backup_disks_mount {-%>
+backupDisksFsMountFolder= <%= $veeamagent::backup_disks_mount %>
+<% } -%>
+
+# Force FUSE mount on kernels 4.0.0-4.1.33 (for file level restore)
+# ignoreFuseBug= false
+<% if $veeamagent::ignore_fuse_bug {-%>
+ignoreFuseBug= <%= $veeamagent::ignore_fuse_bug %>
+<% } -%>
+
+<% } -%>
 # Logs path
 # logsFolder= /var/log/veeam
 <% if $veeamagent::log_dir {-%>
 logsFolder= <%= $veeamagent::log_dir %>
+<% } -%>
+<% if $veeamagent::agent_version == 2 {-%>
+
+# Logs rotation period, days
+# logsRotateDays= 14
+<% if $veeamagent::log_rotate_days {-%>
+logsRotateDays= <%= $veeamagent::log_rotate_days %>
+<% } -%>
+
+# Temp directory path
+# temporaryDirectory= /tmp/veeam
+<% if $veeamagent::temp_dir {-%>
+temporaryDirectory= <%= $veeamagent::temp_dir %>
+<% } -%>
+
 <% } -%>
 
 
@@ -79,6 +130,14 @@ logsFolder= <%= $veeamagent::log_dir %>
 <% if $veeamagent::job_retries {-%>
 retriesCount= <%= $veeamagent::job_retries %>
 <% } -%>
+<% if $veeamagent::agent_version == 2 {-%>
+
+# Job retry delay interval (seconds)
+# retriesInterval= 600
+<% if $veeamagent::job_retry_interval {-%>
+retriesInterval= <%= $veeamagent::job_retry_interval %>
+<% } -%>
+<% } -%>
 
 # Retry all errors, set to 'false' to enable retries only for 'snapshot overflow'
 # retryAllErrors= true
@@ -86,7 +145,27 @@ retriesCount= <%= $veeamagent::job_retries %>
 retryAllErrors= <%= $veeamagent::job_retryallerrors %>
 <% } -%>
 
+<% if $veeamagent::agent_version == 2 {-%>
+[reconnects]
+# Time to wait before each reconnect attempt, ms
+# attemptInterval= 5000
+<% if $veeamagent::reconnect_attempt_interval {-%>
+attemptInterval= <%= $veeamagent::reconnect_attempt_interval %>
+<% } -%>
 
+# Enable reconnect
+# enabled= true
+<% if $veeamagent::reconnect_enabled {-%>
+enabled= <%= $veeamagent::reconnect_enabled %>
+<% } -%>
+
+# Reconnect attempts timeout, ms
+# overallTimeout= 300000
+<% if $veeamagent::reconnect_overall_timeout {-%>
+overallTimeout= <%= $veeamagent::reconnect_overall_timeout %>
+<% } -%>
+
+<% } -%>
 [scripts]
 # Ignore freeze and thaw scripts result
 # ignoreFreezeThawFailures= false
@@ -109,13 +188,22 @@ timeoutPrePost= <%= $veeamagent::prepost_timeout %>
 
 [service]
 # Service socket
+<% if $veeamagent::agent_version == 1 {-%>
 # socket_path= /tmp/veeam/socket/veeam.sock
+<% } elsif $veeamagent::agent_version == 2 {-%>
+# socket_path= /var/tmp/veeam/socket/veeam.sock
+<% } -%>
 <% if $veeamagent::socket_path {-%>
 socket_path= <%= $veeamagent::socket_path %>
 <% } -%>
 
 
 [snapshot]
+<% if $veeamagent::agent_version == 2 {-%>
+# Free percent of storage. Used for calculate optimal snapshot data size and determinate snapshot data location, not for stretch snapshot
+freePercent= <%= $veeamagent::snapshot_free_percent %>
+
+<% } -%>
 # Percent of free space on block device can be used for snapshot data allocating
 # limitFreePercent= 50
 <% if $veeamagent::freepercent_limit {-%>
@@ -146,7 +234,13 @@ minSize= <%= $veeamagent::snapshot_minsize %>
 type= <%= $veeamagent::snapshot_type %>
 <% } -%>
 
+<% if $veeamagent::agent_version == 2 {-%>
+# Used percent of storage. Used for calculate optimal snapshot data size and determinate snapshot data location, not for stretch snapshot
+<% if $veeamagent::snapshot_used_percent {-%>
+usedPercent= <%= $veeamagent::snapshot_used_percent %>
+<% } -%>
 
+<% } -%>
 [stretchsnapshot]
 # Stretch snapshot data portion
 # portionSize= 1073741824
@@ -154,7 +248,13 @@ type= <%= $veeamagent::snapshot_type %>
 portionSize= <%= $veeamagent::stretchsnapshot_portionsize %>
 <% } -%>
 
+<% if $veeamagent::agent_version == 2 {-%>
+# Free percent of storage. Used for determinate snapshot data location. Only for stretch snapshot
+<% if $veeamagent::stretchsnapshot_storage_free_percent {-%>
+storageFreePercent= <%= $veeamagent::stretchsnapshot_storage_free_percent %>
+<% } -%>
 
+<% } -%>
 [veeamsnap]
 # Kernel log logging level. 7 - list all messages as an error, 4 or 0 - all messages as a warning, 2 - all message as a trace (use only if veeam works perfectly on your system)
 # debuglogging= 0

@@ -1,4 +1,7 @@
 ---
+veeamagent::agent_version: 2
+veeamagent::backup_disks_mount:
+veeamagent::backup_disks_fs_mount:
 veeamagent::backup_job::block_size: 'KbBlockSize1024'
 veeamagent::backup_job::compression_type: 'Lz4'
 veeamagent::backup_job::config_dir: '/etc/veeam'
@@ -33,6 +36,8 @@ veeamagent::backup_job::vbrserver_port: 10002
 veeamagent::backup_repo::ensure: present
 veeamagent::backup_repo::location:
 veeamagent::bitlooker_enabled:
+veeamagent::bitlooker_exclude:
+veeamagent::bitlooker_timeout:
 veeamagent::cluster_align:
 veeamagent::config_ensure: present
 veeamagent::config_path: '/etc/veeam/veeam.ini'
@@ -49,16 +54,22 @@ veeamagent::gpgkey_ca_source: 'http://repository.veeam.com/keys/VeeamSoftwareRep
 veeamagent::gpgkey_ensure: present
 veeamagent::gpgkey_local: '/etc/pki/rpm-gpg/RPM-GPG-KEY-VeeamSoftwareRepo'
 veeamagent::gpgkey_source: 'http://repository.veeam.com/keys/RPM-GPG-KEY-VeeamSoftwareRepo'
+veeamagent::ignore_fuse_bug:
 veeamagent::inactivelvm_ignore:
 veeamagent::iorate_limit:
 veeamagent::job_retries:
+veeamagent::job_retry_interval:
 veeamagent::job_retryallerrors:
 veeamagent::log_debuglevel:
 veeamagent::log_dir:
+veeamagent::log_rotate_days:
 veeamagent::package_ensure: present
 veeamagent::package_manage: true
 veeamagent::package_name: ['veeam']
 veeamagent::prepost_timeout:
+veeamagent::reconnect_attempt_interval:
+veeamagent::reconnect_enabled:
+veeamagent::reconnect_overall_timeout:
 veeamagent::repo_baseurl: 'http://repository.veeam.com/backup/linux/agent/rpm/el/7/x86_64'
 veeamagent::repo_manage: true
 veeamagent::repo_path: '/etc/yum.repos.d/veeam.repo'
@@ -66,10 +77,14 @@ veeamagent::repo_template: 'veeamagent/veeam-repo.epp'
 veeamagent::service_enable: true
 veeamagent::service_ensure: running
 veeamagent::service_name: 'veeamservice'
+veeamagent::snapshot_free_percent: 99
 veeamagent::snapshot_location:
 veeamagent::snapshot_maxsize:
 veeamagent::snapshot_minsize:
 veeamagent::snapshot_type:
+veeamagent::snapshot_used_percent: 99
 veeamagent::socket_path:
 veeamagent::stretchsnapshot_portionsize:
+veeamagent::stretchsnapshot_storage_free_percent: 50
+veeamagent::temp_dir:
 veeamagent::veeamcmd_path: ['/usr/bin', '/usr/sbin']
