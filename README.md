@@ -30,7 +30,8 @@ Veeam Backup & Replication backup repositories.
 
 ### What veeamagent affects
 
-**Linux Users Only:** A kernel module called [veeamsnap](https://github.com/veeam/veeamsnap) will be installed as
+**Linux Users Only:** A kernel module called
+[veeamsnap](https://github.com/veeam/veeamsnap) will be installed as
 required by the Veeam Agent for Linux to implement volume snapshots
 and change block tracking.
 
@@ -46,9 +47,79 @@ order for a backup job to successfully complete.
 
 ### Beginning with veeamagent
 
-To install the agent without any backup jobs or repos simply `include ::veeamagent`.
+To install the agent without any backup jobs or repos simply `include veeamagent`.
+If you wish to use this module solely for managing settings in `veeam.ini` then
+instead use
+
+```pupppet
+class { 'veeamagent':
+  package_manage => false,
+  service_manage => false,
+}
+```
 
 ## Usage
+
+### Manage veeam.ini and the agent's service only
+
+When agents are deployed via the Veeam console and used with a backup repositoy
+all that you need to manage on a node is the service and any setting you wish
+to override in the `veeam.ini` file.
+
+To do this create a profile (or some other manifest) like this:
+
+```puppet
+# Veeam agent management
+class profiles::backup (
+  Hash $config_entries = {},
+  Boolean $package_manage = false,
+  Boolean $repo_manage = false,
+  Boolean $service_manage = false,
+  ) {
+  # restrict to physical hosts since agents aren't generally needed in VM's
+  if $facts['is_virtual'] == false {
+    # As support for other os families is still in the works we need to further
+    # restrict how this is applied
+    case $facts['kernel'] {
+      'Linux': {
+        if $facts['os']['family'] == 'RedHat' {
+          class { 'veeamagent':
+            config_entries => $config_entries,
+            package_manage => $package_manage,
+            repo_manage    => $repo_manage,
+            service_manage => $service_manage,
+          }
+        } else {
+          class { 'veeamagent':
+            config_entries => $config_entries,
+            package_manage => false, # not yet supported outside the RedHat family
+            repo_manage    => false, # not yet supported outside the RedHat family
+            service_manage => $service_manage,
+          }
+        }
+      } # end Linux
+      # more kernels to come...
+    } # end kernel case
+  } # end if physical
+}
+```
+
+This will, by default, do nothing to the hosts its applied to. You can alter
+this behaviour easily via hiera in a node file (or similar). Note: the format
+of the hash is described in the `veeam_agent_config` type below.
+
+```yaml
+---
+# set to use the common snapshot type and store data in /veeam-snapshot-space
+profiles::backup::config_entries:
+  'snapshot/location':
+    value: '/veeam-snapshot-space'
+  'snapshot/type':
+    value: 'common'
+
+# enable service management to make sure the agent stays available
+profiles::backup::service_manage: true
+```
 
 ### Create a local repository and backup job
 
@@ -58,11 +129,11 @@ No metaparameters are needed because the module will always create backup
 repos before backup jobs.
 
 ```puppet
-::veeamagent::backup_repo { 'Backup Repo':
+veeamagent::backup_repo { 'Backup Repo':
   location => '/backups',
 }
 
-::veeamagent::backup_job { 'Backup Job':
+veeamagent::backup_job { 'Backup Job':
   repo_name  => 'Backup Repo',
   run_hour   => 22,
   run_minute => 00,
@@ -76,7 +147,7 @@ This example will create the same backup job as above, except the `repo_name`
 parameter points to a Veeam Backup & Replication repository.
 
 ```puppet
-::veeamagent::backup_job { 'Backup Job':
+veeamagent::backup_job { 'Backup Job':
   repo_name          => 'VBR Backups',
   run_hour           => 22,
   run_minute         => 00,
@@ -101,8 +172,8 @@ Create a backup profile:
 class profiles::backup {
   $backup_jobs     = lookup('backup_jobs', Any, 'hash', undef)
   $backup_defaults = lookup('backup_defaults', Any, 'hash', undef)
-  
-  create_resources('::veeamagent::backup_job', $backup_jobs, $backup_defaults)
+
+  create_resources('veeamagent::backup_job', $backup_jobs, $backup_defaults)
 }
 ```
 
@@ -153,6 +224,63 @@ backup_jobs:
 
 ## Reference
 
+### Types
+
+#### `veeam_agent_config`
+
+Manages entries in `veeam.ini`. Optionally, unmanaged settings can be purged.
+If deploying agents via the console then purging resources is not recommended
+for a host without first verifying that you've captured any settings set during
+the deployment.
+
+Resource title: formatted as 'section/setting'
+
+Parameters:
+
+* `ensure`: can be set to present or absent
+* `value`: this is what comes after the `=` of the setting
+
+You can utilize `puppet resource veeam_agent_config --to_yaml` to capture any
+existing values in your `veeam.ini` for use in hiera.
+
+Example hiera entry to set two values and remove a third:
+
+```yaml
+---
+veeamagent::config_entries:
+  'bitlooker/exclude':
+    value: '/dev/sda1, /dev/sdb3'
+  'general/logsRotateDays':
+    value: '7'
+```
+
+If changing the same entries directly within a manifest you can use
+`create_resources` like so:
+
+```puppet
+$settings = {
+  'bitlooker/exclude' => {
+    value => '/dev/sda1, /dev/sdb3'
+  },
+  'general/logsRotateDays' => {
+    value => '7'
+  },
+  'snapshot/type' => {
+    ensure => absent
+  }
+}
+
+create_resources(veeam_agent_config, $settings)
+```
+
+Example of purging unmanaged entries:
+
+```puppet
+resources { 'veeam_agent_config'
+  purge => true,
+}
+```
+
 ### Classes
 
 #### Public classes
@@ -175,111 +303,15 @@ backup_jobs:
 
 ### Parameters - Class: veeamagent
 
-#### `bitlooker_enabled`
+#### `config_entries`
 
 Optional.
 
-Data type: Boolean.
+Data type: Hash.
 
-Allow to disable bitlooker.
+Defines a set of entries for the veeam.ini file.
 
-Default value: ''.
-
-#### `cluster_align`
-
-Optional.
-
-Data type: Integer
-
-Backup cluster alignment logarithm.
-
-Default value: ''.
-
-#### `config_ensure`
-
-Data type: String
-
-Ensure value for the main Veeam config file.
-
-Default value: `present`.
-
-#### `config_path`
-
-Data type: String
-
-The path to where the main Veeam config files should be stored.
-
-Default value: varies by operating system.
-
-#### `cpu_priority`
-
-Optional.
-
-Data type: Integer
-
-CPU priority for veeamagents, from 0 to 19.
-
-Default value: ''.
-
-#### `db_path`
-
-Optional.
-
-Data type: String
-
-Veeam database path.
-
-Default value: ''.
-
-#### `db_schemepath`
-
-Optional.
-
-Data type: String
-
-Veeam database scheme path.
-
-Default value: ''.
-
-#### `db_schemeupgradepath`
-
-Optional.
-
-Data type: String
-
-Veeam database upgrade scheme path.
-
-Default value: ''.
-
-#### `freepercent_limit`
-
-Optional.
-
-Data type: Integer
-
-Percent of free space on block device can be used for snapshot data allocating.
-
-Default value: ''.
-
-#### `freezethawfailure_ignore`
-
-Optional.
-
-Data type: Boolean
-
-Ignore freeze and thaw scripts result.
-
-Default value: ''.
-
-#### `freezethaw_timeout`
-
-Optional.
-
-Data type: Integer
-
-Timeout for freeze and thaw scripts.
-
-Default value: ''.
+Default value: {}.
 
 #### `gpgkey_ca_ensure`
 
@@ -329,66 +361,6 @@ Path to the remote Veeam GPG Key.
 
 Default value: varies by operating system.
 
-#### `inactivelvm_ignore`
-
-Optional.
-
-Data type: Boolean
-
-Ignore inactive LVM logical volumes during backup.
-
-Default value: ''.
-
-#### `iorate_limit`
-
-Optional.
-
-Data type: Integer
-
-IO rate limit, from 0.01 to 1.0.
-
-Default value: ''.
-
-#### `job_retries`
-
-Optional.
-
-Data type: Integer
-
-New job default retries count.
-
-Default value: ''.
-
-#### `job_retryallerrors`
-
-Optional.
-
-Data type: Boolean
-
-Retry all errors, set to 'false' to enable retries only for 'snapshot overflow'.
-
-Default value: ''.
-
-#### `log_debuglevel`
-
-Optional.
-
-Data type: Integer
-
-Kernel log logging level. 7 - list all messages as an error, 4 or 0 - all messages as a warning, 2 - all message as a trace (use only if veeam works perfectly on your system).
-
-Default value: ''.
-
-#### `log_dir`
-
-Optional.
-
-Data type: String
-
-Logs path.
-
-Default value: ''.
-
 #### `package_ensure`
 
 Data type: String
@@ -412,16 +384,6 @@ Data type: Array[String]
 Name for the Veeam package.
 
 Default value: varies by operating system.
-
-#### `prepost_timeout`
-
-Optional.
-
-Data type: Integer
-
-Timeout for pre- and post-backup scripts.
-
-Default value: ''.
 
 #### `repo_manage`
 
@@ -470,66 +432,6 @@ Data type: String
 Name of the Veeam service.
 
 Default value: varies by operating system.
-
-#### `snapshot_location`
-
-Optional.
-
-Data type: String
-
-Location folder for snapshot data, only for 'stretch' and 'common' snapshot.
-
-Default value: ''.
-
-#### `snapshot_maxsize`
-
-Optional.
-
-Data type: Integer
-
-Maximum possible snapshot data size, not for stretch snapshot.
-
-Default value: ''.
-
-#### `snapshot_minsize`
-
-Optional.
-
-Data type: Integer
-
-Minimal possible snapshot data size, not for stretch snapshot.
-
-Default value: ''.
-
-#### `snapshot_type`
-
-Optional.
-
-Data type: String
-
-Snapshot data type, can be 'stretch' (default) or 'common'.
-
-Default value: ''.
-
-#### `socket_path`
-
-Optional.
-
-Data type: String
-
-Service socket.
-
-Default value: ''.
-
-#### `stretchsnapshot_portionsize`
-
-Optional.
-
-Data type: Integer
-
-Stretch snapshot data portion.
-
-Default value: ''.
 
 ### Parameters - Define: veeamagent::backup_repo
 
@@ -657,7 +559,7 @@ Optional.
 
 Data type: String
 
-Path to the script that should be executed after the snapshot creation. This option is available only if Veeam Agent for Linux operates in the server mode. 
+Path to the script that should be executed after the snapshot creation. This option is available only if Veeam Agent for Linux operates in the server mode.
 
 Default value: ''.
 
@@ -740,7 +642,7 @@ Default value: ''.
 
 Optional.
 
-Data type: Boolean 
+Data type: Boolean
 
 Whether to schedule the backup job to run on Mondays.
 
@@ -750,7 +652,7 @@ Default value: `false`.
 
 Optional.
 
-Data type: Boolean 
+Data type: Boolean
 
 Whether to schedule the backup job to run on Saturdays.
 
@@ -760,7 +662,7 @@ Default value: `false`.
 
 Optional.
 
-Data type: Boolean 
+Data type: Boolean
 
 Whether to schedule the backup job to run on Sundays.
 
@@ -770,7 +672,7 @@ Default value: `false`.
 
 Optional.
 
-Data type: Boolean 
+Data type: Boolean
 
 Whether to schedule the backup job to run on Thursdays.
 
@@ -790,7 +692,7 @@ Default value: `false`.
 
 Optional.
 
-Data type: Boolean 
+Data type: Boolean
 
 Whether to schedule the backup job to run on Wednesdays.
 
@@ -798,7 +700,7 @@ Default value: `false`.
 
 #### `vbrserver_domain`
 
-Data type: 
+Data type:
 
 The domain of the user account used to connect to the Veeam Backup & Replication server.
 
@@ -838,7 +740,7 @@ Default value: ''.
 
 Optional.
 
-Data type: String 
+Data type: String
 
 The port used to connect to the Veeam Backup & Replication server.
 
@@ -854,7 +756,7 @@ Default value: varies by operating system.
 
 ## Limitations
 
-This module is currently only campatible with Linux on the RedHat osfamily but support and compatibility will be expanded in the future.
+This module is currently only campatible with Linux on the RedHat family but support and compatibility will be expanded in the future.
 
 This module does not manage backup jobs and repositories created outside of the module.
 
@@ -868,7 +770,7 @@ Pull requests are welcome!
 
 #### Contributors
 
-Gene Liverman (@genebean) - Proofread and updated documentation, added enhancements to testing.
+Gene Liverman (@genebean) - Added types and reworked for compitibilty with agents deployed by the Veeam console. Also proofread and updated documentation, added enhancements to testing.
 
 ### Testing
 
@@ -884,6 +786,6 @@ export PUP_MOD=veeamagent; rsync -rv --delete /vagrant/ /home/vagrant/$PUP_MOD -
 
 ## License
 
-This module is released under the BSD 3-Clause "New" or "Revised" License. 
+This module is released under the BSD 3-Clause "New" or "Revised" License.
 
 By installing Veeam Agent for Linux or Veeam Agent for Microsoft Windows you accept the Veeam End User License Agreement located at http://www.veeam.com/eula.html.

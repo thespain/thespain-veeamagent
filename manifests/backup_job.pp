@@ -2,7 +2,7 @@
 #
 # Note about the Execs:
 # When parameters of the job change, then delete the backup job and reimport it.
-# An extra level of complication is added when using Veeam B&R repositories. 
+# An extra level of complication is added when using Veeam B&R repositories.
 # In order to successfully re-import a job the VBR server must be deleted
 # before re-importing, as well as resyncing the VBR server for repositories.
 #
@@ -76,8 +76,9 @@ define veeamagent::backup_job(
   Integer $vbrserver_port              = lookup('veeamagent::backup_job::vbrserver_port'),
   Array[String] $veeamcmd_path         = lookup('veeamagent::veeamcmd_path'),
 ) {
+  require veeamagent
 
-  require ::veeamagent
+  Veeamagent::Backup_repo <| |> -> Veeamagent::Backup_job <| |>
 
   if ($ensure == present) {
     file { "${config_dir}/${title}.xml":
@@ -164,7 +165,4 @@ define veeamagent::backup_job(
       refreshonly => true,
     }
   }
-
-  ::Veeamagent::Backup_repo <| |> -> ::Veeamagent::Backup_job <| |>
-
 }

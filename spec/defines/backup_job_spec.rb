@@ -6,7 +6,7 @@ describe 'veeamagent::backup_job' do
       let(:facts) do
         facts
       end
-    let(:params) do
+      let(:params) do
         { :repo_name  => 'Backup Repository',
           :run_hour   => 0,
           :run_minute => 0,
@@ -25,7 +25,7 @@ describe 'veeamagent::backup_job' do
       let(:facts) do
         facts
       end
-    let(:params) do
+      let(:params) do
         { :vbrserver_fqdn => 'veeam01.localdomain',
           :repo_name      => 'Backup Repository',
           :run_hour       => 0,
@@ -51,7 +51,7 @@ describe 'veeamagent::backup_job' do
       let(:facts) do
         facts
       end
-    let(:params) do
+      let(:params) do
         { :repo_name  => 'Backup Repository',
           :run_hour   => 0,
           :run_minute => 0,
@@ -74,7 +74,7 @@ describe 'veeamagent::backup_job' do
       let(:facts) do
         facts
       end
-    let(:params) do
+      let(:params) do
         { :ensure => 'absent', }
       end
 
