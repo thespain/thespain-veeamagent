@@ -85,13 +85,13 @@ class veeamagent(
   Optional[Integer] $stretchsnapshot_portionsize,
 ) {
 
-  contain ::veeamagent::preinstall
-  contain ::veeamagent::install
-  contain ::veeamagent::config
-  contain ::veeamagent::service
+  contain veeamagent::preinstall
+  contain veeamagent::install
+  contain veeamagent::config
+  contain veeamagent::service
 
-  Class['::veeamagent::preinstall']
-  -> Class['::veeamagent::install']
-  -> Class['::veeamagent::config']
-  ~> Class['::veeamagent::service']
+  Class['veeamagent::preinstall']
+  -> Class['veeamagent::install']
+  -> Class['veeamagent::config']
+  ~> Class['veeamagent::service']
 }
