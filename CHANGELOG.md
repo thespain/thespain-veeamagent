@@ -1,5 +1,14 @@
 [![GitHub tag](https://img.shields.io/github/tag/thespain/thespain-veeamagent.svg)](https://github.com/thespain/thespain-veeamagent)
 
+## 2019-04-12 Release 1.0.0
+- **Breaking changes:**
+    - Removed all veeam agent config file related parameters (`veeam.ini`) in favor of new type/provider. Please migrate any custom settings to use `veeam_agent_config` as described in the README (See enhancement below).
+
+- **Implemented enhancements:**
+    - Added `veeam_agent_config` type and provider for managing the veeam agent config file (Thanks to Gene Liverman).
+    - Added dependency for module puppetlabs-inifile
+    - Added Puppet 6 support
+
 ## 2017-08-24 Release 0.3.0
 - Added enhancements to testing (Thanks to Gene Liverman).
 
