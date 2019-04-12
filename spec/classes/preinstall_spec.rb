@@ -16,7 +16,7 @@ describe 'veeamagent::preinstall' do
     end
 
     context "on #{os} with repo_manage disabled" do
-      let(:pre_condition) { 'class {"::veeamagent": repo_manage => false}' }
+      let(:pre_condition) { 'class {"veeamagent": repo_manage => false}' }
 
        it { is_expected.not_to contain_file('/etc/yum.repos.d/veeam.repo') }
     end
