@@ -13,7 +13,7 @@ define veeamagent::backup_repo(
   Array[String] $veeamcmd_path      = lookup('veeamagent::veeamcmd_path'),
 ) {
 
-  require ::veeamagent
+  require veeamagent
 
   $find_repo = $facts['kernel'] ? {
     'Linux' => "veeamconfig repository list | grep -E \'^${title}.*${location}\' || exit 1",
