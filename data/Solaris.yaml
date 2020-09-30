@@ -1,0 +1,56 @@
+---
+# Used by init.pp
+veeamagent::config_entries: {}
+veeamagent::publisher_name: Veeam
+veeamagent::publisher_enable: present
+veeamagent::publisher_source: ''
+veeamagent::package_ensure: present
+veeamagent::package_manage: true
+veeamagent::package_name: 'veeam'
+veeamagent::repo_manage: true
+veeamagent::service_enable: true
+veeamagent::service_ensure: running
+veeamagent::service_manage: true
+veeamagent::service_name: 'veeamservice'
+
+# Default path shared between defined types
+veeamagent::veeamcmd_path:
+  - '/usr/bin'
+  - '/usr/sbin'
+
+# Used by bakcup_job defined type
+veeamagent::backup_job::block_size: 'KbBlockSize1024'
+veeamagent::backup_job::compression_type: 'Lz4'
+veeamagent::backup_job::config_dir: '/etc/veeam'
+veeamagent::backup_job::enable_dedup: true
+veeamagent::backup_job::enabled: true
+veeamagent::backup_job::ensure: present
+veeamagent::backup_job::index_all: false
+veeamagent::backup_job::max_points: 14
+veeamagent::backup_job::object_type: 'AllSystem'
+veeamagent::backup_job::object_value: ''
+veeamagent::backup_job::post_jobcommand:
+veeamagent::backup_job::post_thawcommand:
+veeamagent::backup_job::pre_freezecommand:
+veeamagent::backup_job::pre_jobcommand:
+veeamagent::backup_job::record_type: 'Include'
+veeamagent::backup_job::repo_name: undef
+veeamagent::backup_job::retry_count: 3
+veeamagent::backup_job::run_friday: false
+veeamagent::backup_job::run_hour:
+veeamagent::backup_job::run_minute:
+veeamagent::backup_job::run_monday: false
+veeamagent::backup_job::run_saturday: false
+veeamagent::backup_job::run_sunday: false
+veeamagent::backup_job::run_thursday: false
+veeamagent::backup_job::run_tuesday: false
+veeamagent::backup_job::run_wednesday: false
+veeamagent::backup_job::vbrserver_domain:
+veeamagent::backup_job::vbrserver_fqdn:
+veeamagent::backup_job::vbrserver_login:
+veeamagent::backup_job::vbrserver_password:
+veeamagent::backup_job::vbrserver_port: 10002
+
+# Used by backup_repo defined type
+veeamagent::backup_repo::ensure: present
+veeamagent::backup_repo::location:

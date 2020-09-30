@@ -19,6 +19,9 @@
     {
       "name": "puppet-yum",
       "version_requirement": ">= 2.0.0 < 3.0.0"
+    },
+    {
+      "name": "puppet/solaris_providers"
     }
   ],
   "operatingsystem_support": [
@@ -35,6 +38,12 @@
         "6",
         "7"
       ]
+    },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "11.4",
+      ]
     }
   ],
   "requirements": [
@@ -45,4 +54,3 @@
   ],
   "description": "The veeamagent module installs, configures, and manages the Veeam Agent, Veeam backup jobs, and local repositories."
 }
-

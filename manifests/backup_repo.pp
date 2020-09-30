@@ -16,7 +16,7 @@ define veeamagent::backup_repo(
   require veeamagent
 
   $find_repo = $facts['kernel'] ? {
-    'Linux' => "veeamconfig repository list | grep -E \'^${title}.*${location}\' || exit 1",
+    /^(Linux|SunOS)$/ => "veeamconfig repository list | grep -E \'^${title}.*${location}\' || exit 1",
   }
 
   if ($ensure == present) {
