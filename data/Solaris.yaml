@@ -3,7 +3,7 @@
 veeamagent::config_entries: {}
 veeamagent::publisher_name: veeam
 veeamagent::publisher_enable: present
-veeamagent::publisher_source: 'https://oracle-oem-oc-mgmt-pomldomops0304:8002/IPS/'
+veeamagent::publisher_source: ''
 veeamagent::package_ensure: present
 veeamagent::package_manage: true
 veeamagent::package_name: 'VeeamAgent'
