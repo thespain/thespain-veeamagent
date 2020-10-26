@@ -1,17 +1,17 @@
 ---
 # Used by init.pp
 veeamagent::config_entries: {}
-veeamagent::publisher_name: Veeam
+veeamagent::publisher_name: veeam
 veeamagent::publisher_enable: present
 veeamagent::publisher_source: ''
 veeamagent::package_ensure: present
 veeamagent::package_manage: true
-veeamagent::package_name: 'veeam'
-veeamagent::repo_manage: true
+veeamagent::package_name: 'VeeamAgent'
+veeamagent::repo_manage: false
 veeamagent::service_enable: true
 veeamagent::service_ensure: running
 veeamagent::service_manage: true
-veeamagent::service_name: 'veeamservice'
+veeamagent::service_name: 'veeamservicesvc'
 
 # Default path shared between defined types
 veeamagent::veeamcmd_path:
