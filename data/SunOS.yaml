@@ -11,7 +11,7 @@ veeamagent::repo_manage: false
 veeamagent::service_enable: true
 veeamagent::service_ensure: running
 veeamagent::service_manage: true
-veeamagent::service_name: 'veeamservicesvc'
+veeamagent::service_name: 'svc:/veeamsvc:default'
 
 # Default path shared between defined types
 veeamagent::veeamcmd_path:
