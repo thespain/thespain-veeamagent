@@ -19,15 +19,15 @@ veeamagent::veeamcmd_path:
   - '/usr/sbin'
 
 # Used by bakcup_job defined type
-veeamagent::backup_job::block_size: 'KbBlockSize1024'
-veeamagent::backup_job::compression_type: 'Lz4'
+#veeamagent::backup_job::block_size: 'KbBlockSize1024'
+#veeamagent::backup_job::compression_type: 'Lz4'
 veeamagent::backup_job::config_dir: '/etc/veeam'
-veeamagent::backup_job::enable_dedup: true
+veeamagent::backup_job::enable_dedup: false #not supported
 veeamagent::backup_job::enabled: true
 veeamagent::backup_job::ensure: present
-veeamagent::backup_job::index_all: false
+veeamagent::backup_job::index_all: true 
 veeamagent::backup_job::max_points: 14
-veeamagent::backup_job::object_type: 'AllSystem'
+#veeamagent::backup_job::object_type: 'AllSystem'
 veeamagent::backup_job::object_value: ''
 veeamagent::backup_job::post_jobcommand:
 veeamagent::backup_job::post_thawcommand:
