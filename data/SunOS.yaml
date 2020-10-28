@@ -23,7 +23,7 @@ veeamagent::backup_job::block_size: 'KbBlockSize1024'
 veeamagent::backup_job::compression_type: 'Lz4'
 veeamagent::backup_job::config_dir: '/etc/veeam'
 veeamagent::backup_job::enable_dedup: true
-veeamagent::backup_job::enabled: true
+veeamagent::backup_job::enabled: false # fail safe
 veeamagent::backup_job::ensure: present
 veeamagent::backup_job::index_all: true
 veeamagent::backup_job::max_points: 14
