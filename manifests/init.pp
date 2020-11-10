@@ -27,6 +27,8 @@ class veeamagent(
   Boolean $service_enable,
   Boolean $service_manage,
   Hash $config_entries,
+  String[1] $service_ensure,
+  String[1] $service_name,
   Optional[String] $gpgkey_ca_ensure = undef,
   Optional[String] $gpgkey_ca_local = undef,
   Optional[String] $gpgkey_ca_source = undef,
@@ -37,8 +39,7 @@ class veeamagent(
   Optional[String] $package_name = undef,
   Optional[String] $repo_path = undef,
   Optional[String] $repo_template = undef,
-  String[1] $service_ensure,
-  String[1] $service_name,
+ 
 ) {
 
   contain veeamagent::preinstall
