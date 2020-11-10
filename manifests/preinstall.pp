@@ -12,16 +12,21 @@ class veeamagent::preinstall inherits veeamagent {
           ensure => $veeamagent::gpgkey_ensure,
           source => $veeamagent::gpgkey_source,
         }
-      }
 
+        file { $veeamagent::repo_path:
+          ensure  => file,
+          content => epp($veeamagent::repo_template),
+        }
+      }
+      'Solaris': {
+        pkg_publisher { $veeamagent::publisher_name:
+          ensure => $veeamagent::publisher_enable,
+          origin => $veeamagent::publisher_source,
+        }
+      }
       default: {
         fail("Repository management is not supported ${facts['os']['family']}")
       }
-    }
-
-    file { $veeamagent::repo_path:
-      ensure  => file,
-      content => epp($veeamagent::repo_template),
     }
   }
 }

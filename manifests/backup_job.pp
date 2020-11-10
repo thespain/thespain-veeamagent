@@ -148,7 +148,7 @@ define veeamagent::backup_job(
     }
 
     exec { "Import Backup Job - ${title}":
-      command     => "veeamconfig config import --file \"${config_dir}/${title}.xml\"",
+      command     => "veeamconfig config import --force --file \"${config_dir}/${title}.xml\"",
       path        => $veeamcmd_path,
       refreshonly => true,
     }

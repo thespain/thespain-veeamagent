@@ -12,13 +12,19 @@ describe 'veeamagent::preinstall' do
         .with_content(/baseurl=http:\/\/repository.veeam.com\/backup\/linux\/agent\/rpm\/el\/(6|7)\/\$basearch/) }
         it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/RPM-GPG-KEY-VeeamSoftwareRepo') }
         it { is_expected.to contain_yum__gpgkey('/etc/pki/rpm-gpg/VeeamSoftwareRepo') }
+      when 'Solaris'
+        it { is_expected.to contain_pkg_pulisher('Veeam')}
       end
     end
 
     context "on #{os} with repo_manage disabled" do
       let(:pre_condition) { 'class {"veeamagent": repo_manage => false}' }
-
-       it { is_expected.not_to contain_file('/etc/yum.repos.d/veeam.repo') }
+      case facts[:osfamily]
+        when 'RedHat'
+          it { is_expected.not_to contain_file('/etc/yum.repos.d/veeam.repo') }
+        when 'Solaris'
+          it { is_expected.not_to contain_pkg_pulisher('Veeam')}
+        end
     end
   end
 end

@@ -1,10 +1,27 @@
 ---
 # Used by init.pp
 veeamagent::config_entries: {}
+veeamagent::gpgkey_ca_ensure: present
+veeamagent::gpgkey_ca_local: '/etc/pki/rpm-gpg/VeeamSoftwareRepo'
+veeamagent::gpgkey_ca_source: 'http://repository.veeam.com/keys/VeeamSoftwareRepo'
+veeamagent::gpgkey_ensure: present
+veeamagent::gpgkey_local: '/etc/pki/rpm-gpg/RPM-GPG-KEY-VeeamSoftwareRepo'
+veeamagent::gpgkey_source: 'http://repository.veeam.com/keys/RPM-GPG-KEY-VeeamSoftwareRepo'
+veeamagent::package_ensure: present
+veeamagent::package_manage: true
+veeamagent::package_name: 'veeam'
+veeamagent::repo_manage: true
+veeamagent::repo_path: '/etc/yum.repos.d/veeam.repo'
+veeamagent::repo_template: 'veeamagent/veeam-repo.epp'
 veeamagent::service_enable: true
 veeamagent::service_ensure: running
 veeamagent::service_manage: true
 veeamagent::service_name: 'veeamservice'
+
+# Default path shared between defined types
+veeamagent::veeamcmd_path:
+  - '/usr/bin'
+  - '/usr/sbin'
 
 # Used by bakcup_job defined type
 veeamagent::backup_job::block_size: 'KbBlockSize1024'
